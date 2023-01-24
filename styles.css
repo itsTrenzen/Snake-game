@@ -1,0 +1,11 @@
+#cnv {
+    border: 2px solid red;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+#imgSnake {
+    visibility: hidden;
+}
