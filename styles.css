@@ -3,15 +3,13 @@ body {
 }
 
 .gameArea {
-    
-    
     position: absolute;
     width: 60%;
     height: 60%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 .scoreArea {
@@ -22,7 +20,7 @@ body {
 .scoreLabel {
    font-size: 30px;
    position: absolute;
-   left: 15%;
+   left: 17%;
    top: 10%;
 }
 
@@ -43,4 +41,14 @@ body {
 
 .tiles {
     visibility: hidden;
+}
+
+#imgSnake {
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+#imgApple {
+    position: absolute;
+    transform: translate(-50%,-50%);
 }
