@@ -12,6 +12,13 @@ let posX = frameWidth/2;
 let posY = frameHeight/2;
 const tileSize = 8;
 
+//apple
+let apple = {
+    x: Math.floor(Math.random() * frameWidth) + 8,
+    y: Math.floor(Math.random() * frameHeight) + 8,
+    imgApple: document.getElementById("imgApple")
+}
+
 setup();
 
 setInterval(() => {
@@ -22,8 +29,14 @@ setInterval(() => {
         posX += tileSize;
         posY += 0;
     }
+    ctx.drawImage(imgApple, apple.x, apple.y, tileSize, tileSize);
 }, 200);
+
+function isAppleTouched() {
+    
+}
 
 function setup() {
     snake = 4;
+
 }
