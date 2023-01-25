@@ -75,10 +75,10 @@ let apple = {
 }
 //events
 document.addEventListener('keyup', (e) => {
-    if (e.code == "ArrowUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up", addDirection("up", snake.length);
-    else if (e.code == "ArrowDown" && (snake.direction != "up" && snake.direction != "down")) snake.direction = "down", addDirection("down", snake.length);
-    else if (e.code == "ArrowLeft" && (snake.direction != "right" && snake.direction != "left")) snake.direction = "left", addDirection("left", snake.length);
-    else if (e.code == "ArrowRight" && (snake.direction != "left" && snake.direction != "right")) snake.direction = "right", addDirection("right", snake.length); 
+    if (e.code == "ArrowUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up"//, addDirection("up", snake.length);
+    else if (e.code == "ArrowDown" && (snake.direction != "up" && snake.direction != "down")) snake.direction = "down"//, addDirection("down", snake.length);
+    else if (e.code == "ArrowLeft" && (snake.direction != "right" && snake.direction != "left")) snake.direction = "left"//, addDirection("left", snake.length);
+    else if (e.code == "ArrowRight" && (snake.direction != "left" && snake.direction != "right")) snake.direction = "right"//, addDirection("right", snake.length); 
 });
 
 setInterval(() => {
@@ -87,7 +87,8 @@ setInterval(() => {
     for (let i = 0; i < snake.length; i++) { 
         
         if (i == 0) {
-           let dir = getDirection();
+            addDirection(snake.direction, snake.length);
+            let dir = getDirection();
             if (dir == "right") {
                 addDirection("right", snake.length);
                 snake.posX += tileSize;
@@ -185,7 +186,8 @@ setInterval(() => {
 */
 //check for apple
 function isAppleTouched() {
-    if (snake.posX == apple.x && snake.posY == apple.y) {
+    //if (snake.posX == apple.x && snake.posY == apple.y) {
+    if (apple.x - snake.posX < 10.0 && apple.y - snake.posY < 10.0) {
         snake.score += 50;
         snake.length += 1;
         document.getElementById("scorePoints").innerHTML = snake.score;
@@ -219,6 +221,6 @@ function removeDirection() {
 }
 
 function getDirection() {
-    let p = snake.queue.pop();
-    return p;
+   // let p = snake.queue.pop();
+    return snake.queue.pop();
 }
