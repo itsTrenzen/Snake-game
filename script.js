@@ -7,9 +7,13 @@ const frameHeight = 500;
 //snake
 let snakeImg = document.getElementById("imgSnake");
 let moves;
-let snake;
-let posX = frameWidth/2;
-let posY = frameHeight/2;
+let snake = {
+        length: 4,
+        direction: 'right', 
+        posX: frameWidth/2,
+        posY: frameHeight/2,
+        score: 0
+    }
 const tileSize = 8;
 
 //apple
@@ -19,24 +23,43 @@ let apple = {
     imgApple: document.getElementById("imgApple")
 }
 
-setup();
-
+//events
+document.addEventListener('keyup', (e) => {
+    if (e.code == "ArrowUp" && snake.direction != "down") snake.direction = "up";
+    else if (e.code == "ArrowDown" && snake.direction != "up") snake.direction = "down";
+    else if (e.code == "ArrowLeft" && snake.direction != "right") snake.direction = "left";
+    else if (e.code == "ArrowRight" && snake.direction != "left") snake.direction = "right"; 
+});
+//running interval
 setInterval(() => {
     ctx.clearRect(0,0, frameWidth, frameHeight);
-    for (let i = 0; i < snake; i++) { 
+
+    for (let i = 0; i < snake.length; i++) { 
         
-        ctx.drawImage(snakeImg, posX - i*(tileSize*2), posY, tileSize, tileSize);
-        posX += tileSize;
-        posY += 0;
+        if (snake.direction == "right") {
+            snake.posX += tileSize;
+            ctx.drawImage(snakeImg, snake.posX - i*(tileSize*2), snake.posY, tileSize, tileSize);
+        }
+        if (snake.direction == "left") {
+            snake.posX -= tileSize;
+            ctx.drawImage(snakeImg, snake.posX + i*(tileSize*2), snake.posY, tileSize, tileSize);
+        }
+        if (snake.direction == "up") {
+            snake.posY -= tileSize; 
+            ctx.drawImage(snakeImg, snake.posX, snake.posY - i*(tileSize*2), tileSize, tileSize);
+        }
+        if (snake.direction == "down") {
+            snake.posY += tileSize; 
+            ctx.drawImage(snakeImg, snake.posX, snake.posY + i*(tileSize*2), tileSize, tileSize);
+        }
     }
     ctx.drawImage(imgApple, apple.x, apple.y, tileSize, tileSize);
 }, 200);
 
 function isAppleTouched() {
-    
-}
-
-function setup() {
-    snake = 4;
-
+    if (snake.posX == apple.x && snake.posY == apple.y) {
+        snake.score += 50;
+        document.getElementById("scorePoints").innerHTML = snake.score;
+        alert("scored");
+    }
 }
