@@ -8,41 +8,17 @@ const frameHeight = 500;
 let snakeImg = document.getElementById("imgSnake");
 const tileSize = 8;
 let snake = {
-        length: 4,
+        length: 5,
         direction: 'right', 
         posX: 245,
         posY: 245,
         score: 0,
-        queue: ["right"],
-        tail: [/*{},
-            {id: 2, 
-            x: snake.posX - tileSize*2,
-            y:snake.posY, 
-            getX: function() {return this.x},
-            getY: function() {return this.y},
-            setX: function(p) {this.x += p},
-            setY: function(p) {this.y += p}
-        },
-        {id: 3, 
-            x: snake.posX - tileSize*3,
-            y:snake.posY,
-            getX: function() {return this.x},
-            getY: function() {return this.y},
-            setX: function(p) {this.x += p},
-            setY: function(p) {this.y += p}
-        },
-        {id: 4, 
-            x: snake.posX - tileSize*4,
-            y:snake.posY,
-            getX: function() {return this.x},
-            getY: function() {return this.y},
-            setX: function(p) {this.x += p},
-            setY: function(p) {this.y += p}
-        }*/]
+        queue: [],
+        tail: []
     }
     
 snake.tail = [{},
-    {id: 2, 
+    {id: 1, 
     x: snake.posX - tileSize,
     y: snake.posY, 
     getX: function() {return this.x},
@@ -50,7 +26,7 @@ snake.tail = [{},
     setX: function(p) {this.x += p},
     setY: function(p) {this.y += p}
 },
-{id: 3, 
+{id: 2, 
     x: snake.posX - tileSize*2,
     y: snake.posY,
     getX: function() {return this.x},
@@ -58,8 +34,16 @@ snake.tail = [{},
     setX: function(p) {this.x += p},
     setY: function(p) {this.y += p}
 },
-{id: 4, 
+{id: 3, 
     x: snake.posX - tileSize*3,
+    y: snake.posY,
+    getX: function() {return this.x},
+    getY: function() {return this.y},
+    setX: function(p) {this.x += p},
+    setY: function(p) {this.y += p}
+},
+{id: 4, 
+    x: snake.posX - tileSize*4,
     y: snake.posY,
     getX: function() {return this.x},
     getY: function() {return this.y},
@@ -75,10 +59,10 @@ let apple = {
 }
 //events
 document.addEventListener('keyup', (e) => {
-    if (e.code == "ArrowUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up"//, addDirection("up", snake.length);
-    else if (e.code == "ArrowDown" && (snake.direction != "up" && snake.direction != "down")) snake.direction = "down"//, addDirection("down", snake.length);
-    else if (e.code == "ArrowLeft" && (snake.direction != "right" && snake.direction != "left")) snake.direction = "left"//, addDirection("left", snake.length);
-    else if (e.code == "ArrowRight" && (snake.direction != "left" && snake.direction != "right")) snake.direction = "right"//, addDirection("right", snake.length); 
+    if (e.code == "ArrowUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up";
+    else if (e.code == "ArrowDown" && (snake.direction != "up" && snake.direction != "down")) snake.direction = "down";
+    else if (e.code == "ArrowLeft" && (snake.direction != "right" && snake.direction != "left")) snake.direction = "left";
+    else if (e.code == "ArrowRight" && (snake.direction != "left" && snake.direction != "right")) snake.direction = "right"; 
 });
 
 setInterval(() => {
@@ -86,30 +70,32 @@ setInterval(() => {
 
     for (let i = 0; i < snake.length; i++) { 
         
+        //head
         if (i == 0) {
-            addDirection(snake.direction, snake.length);
-            let dir = getDirection();
+            let dir = snake.direction;
+            
             if (dir == "right") {
-                addDirection("right", snake.length);
+                addDirection("right", snake.length-1);
                 snake.posX += tileSize;
                 ctx.drawImage(snakeImg, snake.posX - i*(tileSize), snake.posY, tileSize, tileSize);
                 }
             else if (dir == "left") {
-                addDirection("left", snake.length);
+                addDirection("left", snake.length-1);
                 snake.posX -= tileSize;
                 ctx.drawImage(snakeImg, snake.posX + i*(tileSize), snake.posY, tileSize, tileSize);
                 }
             else if (dir == "up") {
-                addDirection("up", snake.length);
+                addDirection("up", snake.length-1);
                 snake.posY -= tileSize; 
                 ctx.drawImage(snakeImg, snake.posX, snake.posY - i*(tileSize), tileSize, tileSize);
                 }
             else if (dir == "down") {
-                addDirection("down", snake.length);
+                addDirection("down", snake.length-1);
                 snake.posY += tileSize; 
                 ctx.drawImage(snakeImg, snake.posX, snake.posY + i*(tileSize), tileSize, tileSize);
                 }
            }
+           //tail
         else if (i > 0) {
             let dir = getDirection();
             if (dir == "right") {
@@ -128,10 +114,10 @@ setInterval(() => {
                 snake.tail[i].setY(tileSize); 
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
+            }
         }
-    }
-    ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
-}, 200);
+        ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
+    }, 200);
 //running interval
 /*setInterval(() => {
     ctx.clearRect(0,0, frameWidth, frameHeight);
@@ -193,7 +179,7 @@ function isAppleTouched() {
         document.getElementById("scorePoints").innerHTML = snake.score;
         alert("scored");
         snake.tail.push({
-            id: snake.length+1, 
+            id: snake.length, 
             x: snake.posX - tileSize*(snake.length+1),
             y:snake.posY,
             getX: function() {return this.x},
@@ -216,11 +202,7 @@ function addDirection(dir, amount) {
     }
 }
 
-function removeDirection() {
-    snake.queue.shift();
-}
-
 function getDirection() {
    // let p = snake.queue.pop();
-    return snake.queue.pop();
+    return snake.queue.shift();
 }
