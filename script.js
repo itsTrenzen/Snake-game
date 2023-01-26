@@ -7,6 +7,7 @@ const frameHeight = 500;
 //snake
 let snakeImg = document.getElementById("imgSnake");
 const tileSize = 8;
+let gameOver = false;
 
 setup(18);
 //apple
@@ -25,6 +26,7 @@ document.addEventListener('keyup', (e) => {
 
 //run
 setInterval(() => {
+    if (!gameOver) {
     ctx.clearRect(0,0, frameWidth, frameHeight);
     //transfering moves
     for (let i = 1; i < snake.length; i++) {
@@ -83,7 +85,7 @@ setInterval(() => {
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
         checkBorder();
         isAppleTouched();
-    }, 200);
+    }}, 200);
 
 //check for apple
 function isAppleTouched() {
@@ -110,6 +112,7 @@ function isAppleTouched() {
 function checkBorder() {
     if (snake.getPosX() >= frameWidth) {
         cnv.style.borderColor = "red";
+        gameOver = true;
     }
 }
 //random positon for the apple
