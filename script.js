@@ -7,50 +7,58 @@ const frameHeight = 500;
 //snake
 let snakeImg = document.getElementById("imgSnake");
 const tileSize = 8;
-let snake = {
+
+/*let snake = {
         length: 5,
         direction: 'right', 
         posX: 245,
         posY: 245,
         score: 0,
-        queue: [],
         tail: []
     }
     
 snake.tail = [{},
-    {id: 1, 
+    { 
     x: snake.posX - tileSize,
     y: snake.posY, 
+    nextMove: "right",
+    oldMove: "right",
     getX: function() {return this.x},
     getY: function() {return this.y},
     setX: function(p) {this.x += p},
     setY: function(p) {this.y += p}
 },
-{id: 2, 
+{ 
     x: snake.posX - tileSize*2,
     y: snake.posY,
+    nextMove: "right",
+    oldMove: "right",
     getX: function() {return this.x},
     getY: function() {return this.y},
     setX: function(p) {this.x += p},
     setY: function(p) {this.y += p}
 },
-{id: 3, 
+{
     x: snake.posX - tileSize*3,
     y: snake.posY,
+    nextMove: "right",
+    oldMove: "right",
     getX: function() {return this.x},
     getY: function() {return this.y},
     setX: function(p) {this.x += p},
     setY: function(p) {this.y += p}
 },
-{id: 4, 
+{ 
     x: snake.posX - tileSize*4,
     y: snake.posY,
+    nextMove: "right",
+    oldMove: "right",
     getX: function() {return this.x},
     getY: function() {return this.y},
     setX: function(p) {this.x += p},
     setY: function(p) {this.y += p}
-}];
-
+}];*/
+setup(8);
 //apple
 let apple = {
     x: generateApplePosition(),
@@ -65,53 +73,57 @@ document.addEventListener('keyup', (e) => {
     else if (e.code == "ArrowRight" && (snake.direction != "left" && snake.direction != "right")) snake.direction = "right"; 
 });
 
+//run
 setInterval(() => {
     ctx.clearRect(0,0, frameWidth, frameHeight);
-    snake.queue = sort();
+    //transfering moves
+    for (let i = 1; i < snake.length; i++) {
+        if (i == 1) {
+            snake.tail[i].oldMove = snake.tail[i].nextMove;
+            snake.tail[i].nextMove = snake.direction;
+        } else {
+            snake.tail[i].oldMove = snake.tail[i].nextMove;
+            snake.tail[i].nextMove = snake.tail[i-1].oldMove;
+        } 
+    }
+
     for (let i = 0; i < snake.length; i++) { 
-        
         //head
         if (i == 0) {
             let dir = snake.direction;
             
             if (dir == "right") {
-                //addDirection("right", snake.length-1);
-                addDirection("right", 1);
                 snake.posX += tileSize;
                 ctx.drawImage(snakeImg, snake.posX - i*(tileSize), snake.posY, tileSize, tileSize);
                 }
             else if (dir == "left") {
-                addDirection("left", 1);
                 snake.posX -= tileSize;
                 ctx.drawImage(snakeImg, snake.posX + i*(tileSize), snake.posY, tileSize, tileSize);
                 }
             else if (dir == "up") {
-                addDirection("up", 1);
                 snake.posY -= tileSize; 
                 ctx.drawImage(snakeImg, snake.posX, snake.posY - i*(tileSize), tileSize, tileSize);
                 }
             else if (dir == "down") {
-                addDirection("down", 1);
                 snake.posY += tileSize; 
                 ctx.drawImage(snakeImg, snake.posX, snake.posY + i*(tileSize), tileSize, tileSize);
                 }
            }
            //tail
         else if (i > 0) {
-            //let dir = getDirection();
-            if (snake.queue[i] == "right") { //if (dir == "right")
+            if (snake.tail[i].nextMove == "right") { 
                 snake.tail[i].setX(tileSize);
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
-            else if (snake.queue[i] == "left") {
+            else if (snake.tail[i].nextMove == "left") {
                 snake.tail[i].setX(-tileSize);
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
-            else if (snake.queue[i] == "up") {
+            else if (snake.tail[i].nextMove == "up") {
                 snake.tail[i].setY(-tileSize); 
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
-            else if (snake.queue[i] == "down") {
+            else if (snake.tail[i].nextMove == "down") {
                 snake.tail[i].setY(tileSize); 
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
@@ -119,58 +131,7 @@ setInterval(() => {
         }
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
     }, 200);
-//running interval
-/*setInterval(() => {
-    ctx.clearRect(0,0, frameWidth, frameHeight);
 
-    for (let i = 0; i < snake.length; i++) { 
-        let dir = getDirection();
-        if (i == 0) {
-           
-            if (dir == "right") {
-                addDirection("right", snake.length+3);
-                snake.posX += tileSize-5;
-                ctx.drawImage(snakeImg, snake.posX - i*(tileSize*2), snake.posY, tileSize, tileSize);
-                }
-            else if (dir == "left") {
-                addDirection("left", snake.length+3);
-                snake.posX -= tileSize-5;
-                ctx.drawImage(snakeImg, snake.posX + i*(tileSize*2), snake.posY, tileSize, tileSize);
-                }
-            else if (dir == "up") {
-                addDirection("up", snake.length+3);
-                snake.posY -= tileSize-5; 
-                ctx.drawImage(snakeImg, snake.posX, snake.posY - i*(tileSize*2), tileSize, tileSize);
-                }
-            else if (dir == "down") {
-                addDirection("down", snake.length+3);
-                snake.posY += tileSize-5; 
-                ctx.drawImage(snakeImg, snake.posX, snake.posY + i*(tileSize*2), tileSize, tileSize);
-                }
-           }
-        else if (i > 0) {
-            let dir = getDirection();
-            if (dir == "right") {
-                snake.posX += tileSize-5;
-                ctx.drawImage(snakeImg, snake.posX - i*(tileSize*2), snake.posY, tileSize, tileSize);
-                }
-            else if (dir == "left") {
-                snake.posX -= tileSize-5;
-                ctx.drawImage(snakeImg, snake.posX + i*(tileSize*2), snake.posY, tileSize, tileSize);
-                }
-            else if (dir == "up") {
-                snake.posY -= tileSize-5; 
-                ctx.drawImage(snakeImg, snake.posX, snake.posY - i*(tileSize*2), tileSize, tileSize);
-                }
-            else if (dir == "down") {
-                snake.posY += tileSize-5; 
-                ctx.drawImage(snakeImg, snake.posX, snake.posY + i*(tileSize*2), tileSize, tileSize);
-                }
-        }
-    }
-    ctx.drawImage(imgApple, apple.x, apple.y, tileSize, tileSize);
-}, 200);
-*/
 //check for apple
 function isAppleTouched() {
     //if (snake.posX == apple.x && snake.posY == apple.y) {
@@ -183,6 +144,8 @@ function isAppleTouched() {
             id: snake.length, 
             x: snake.posX - tileSize*(snake.length+1),
             y:snake.posY,
+            nextMove: snake.tail[snake.length-1].oldMove,
+            oldMove: "right",
             getX: function() {return this.x},
             getY: function() {return this.y},
             setX: function(p) {this.x += p},
@@ -197,26 +160,29 @@ function generateApplePosition() {
     return generateApplePosition();  
 }
 
-function addDirection(dir, amount) {
-    for (let i = 0; i < amount; i++) {
-    snake.queue.push(dir);
+function setup(len) {
+    snake = {
+        length: len,
+        direction: 'right', 
+        posX: 245,
+        posY: 245,
+        score: 0,
+        tail: []
     }
-}
-
-function sort() {
-    let l = snake.length;
-    let temp = []; 
-    for (let i = 0; i < l; i++){
-        temp.push("dummy");
+    for (let index = 0; index < len; index++) {
+        if (index == 0) {
+            snake.tail = [{}];
+        } else {
+            snake.tail.push({ 
+                x: snake.posX - tileSize*index,
+                y: snake.posY, 
+                nextMove: "right",
+                oldMove: "right",
+                getX: function() {return this.x},
+                getY: function() {return this.y},
+                setX: function(p) {this.x += p},
+                setY: function(p) {this.y += p}
+            });
+        }
     }
-    temp[0] = snake.direction;
-    for (let i = 1; i < snake.queue.length; i++) {
-        temp[i] = snake.queue[i-1];
-    }
-    return temp;
-}
-
-function getDirection() {
-   // let p = snake.queue.pop();
-    return snake.queue.shift();
 }
