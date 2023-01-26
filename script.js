@@ -67,7 +67,7 @@ document.addEventListener('keyup', (e) => {
 
 setInterval(() => {
     ctx.clearRect(0,0, frameWidth, frameHeight);
-
+    snake.queue = sort();
     for (let i = 0; i < snake.length; i++) { 
         
         //head
@@ -75,42 +75,43 @@ setInterval(() => {
             let dir = snake.direction;
             
             if (dir == "right") {
-                addDirection("right", snake.length-1);
+                //addDirection("right", snake.length-1);
+                addDirection("right", 1);
                 snake.posX += tileSize;
                 ctx.drawImage(snakeImg, snake.posX - i*(tileSize), snake.posY, tileSize, tileSize);
                 }
             else if (dir == "left") {
-                addDirection("left", snake.length-1);
+                addDirection("left", 1);
                 snake.posX -= tileSize;
                 ctx.drawImage(snakeImg, snake.posX + i*(tileSize), snake.posY, tileSize, tileSize);
                 }
             else if (dir == "up") {
-                addDirection("up", snake.length-1);
+                addDirection("up", 1);
                 snake.posY -= tileSize; 
                 ctx.drawImage(snakeImg, snake.posX, snake.posY - i*(tileSize), tileSize, tileSize);
                 }
             else if (dir == "down") {
-                addDirection("down", snake.length-1);
+                addDirection("down", 1);
                 snake.posY += tileSize; 
                 ctx.drawImage(snakeImg, snake.posX, snake.posY + i*(tileSize), tileSize, tileSize);
                 }
            }
            //tail
         else if (i > 0) {
-            let dir = getDirection();
-            if (dir == "right") {
+            //let dir = getDirection();
+            if (snake.queue[i] == "right") { //if (dir == "right")
                 snake.tail[i].setX(tileSize);
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
-            else if (dir == "left") {
+            else if (snake.queue[i] == "left") {
                 snake.tail[i].setX(-tileSize);
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
-            else if (dir == "up") {
+            else if (snake.queue[i] == "up") {
                 snake.tail[i].setY(-tileSize); 
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
-            else if (dir == "down") {
+            else if (snake.queue[i] == "down") {
                 snake.tail[i].setY(tileSize); 
                 ctx.drawImage(snakeImg, snake.tail[i].getX(), snake.tail[i].getY(), tileSize, tileSize);
                 }
@@ -200,6 +201,19 @@ function addDirection(dir, amount) {
     for (let i = 0; i < amount; i++) {
     snake.queue.push(dir);
     }
+}
+
+function sort() {
+    let l = snake.length;
+    let temp = []; 
+    for (let i = 0; i < l; i++){
+        temp.push("dummy");
+    }
+    temp[0] = snake.direction;
+    for (let i = 1; i < snake.queue.length; i++) {
+        temp[i] = snake.queue[i-1];
+    }
+    return temp;
 }
 
 function getDirection() {
