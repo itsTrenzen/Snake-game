@@ -8,36 +8,6 @@ const frameHeight = 500;
 let snakeImg = document.getElementById("imgSnake");
 const tileSize = 8;
 
-/*let snake = {
-        length: 5,
-        direction: 'right', 
-        posX: 245,
-        posY: 245,
-        score: 0,
-        tail: []
-    }
-    
-snake.tail = [{},
-    { 
-    x: snake.posX - tileSize,
-    y: snake.posY, 
-    nextMove: "right",
-    oldMove: "right",
-    getX: function() {return this.x},
-    getY: function() {return this.y},
-    setX: function(p) {this.x += p},
-    setY: function(p) {this.y += p}
-},
-{ 
-    x: snake.posX - tileSize*2,
-    y: snake.posY,
-    nextMove: "right",
-    oldMove: "right",
-    getX: function() {return this.x},
-    getY: function() {return this.y},
-    setX: function(p) {this.x += p},
-    setY: function(p) {this.y += p}
-}];*/
 setup(18);
 //apple
 let apple = {
@@ -111,18 +81,19 @@ setInterval(() => {
             }
         }
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
+        checkBorder();
+        isAppleTouched();
     }, 200);
 
 //check for apple
 function isAppleTouched() {
-    //if (snake.posX == apple.x && snake.posY == apple.y) {
-    if (apple.x - snake.posX < 10.0 && apple.y - snake.posY < 10.0) {
+    
+    if (apple.x == snake.getPosX() && apple.y == snake.posY) {
+        alert("scored");
         snake.score += 50;
         snake.length += 1;
         document.getElementById("scorePoints").innerHTML = snake.score;
-        alert("scored");
         snake.tail.push({
-            id: snake.length, 
             x: snake.posX - tileSize*(snake.length+1),
             y:snake.posY,
             nextMove: snake.tail[snake.length-1].oldMove,
@@ -134,9 +105,16 @@ function isAppleTouched() {
         });
     }
 }
+
+//check for border
+function checkBorder() {
+    if (snake.getPosX() >= frameWidth) {
+        cnv.style.borderColor = "red";
+    }
+}
 //random positon for the apple
 function generateApplePosition() {
-    let temp = Math.floor(Math.random() * frameWidth) + 8;
+    let temp = Math.floor(Math.random() * (frameWidth-16)) + 8;
     if (temp % 8 == 0) return temp;
     return generateApplePosition();  
 }
@@ -147,6 +125,7 @@ function setup(len) {
         direction: 'right', 
         oldDirection: 'right',
         posX: 245,
+        getPosX: function() {return this.posX},
         posY: 245,
         score: 0,
         tail: []
