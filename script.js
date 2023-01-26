@@ -37,28 +37,8 @@ snake.tail = [{},
     getY: function() {return this.y},
     setX: function(p) {this.x += p},
     setY: function(p) {this.y += p}
-},
-{
-    x: snake.posX - tileSize*3,
-    y: snake.posY,
-    nextMove: "right",
-    oldMove: "right",
-    getX: function() {return this.x},
-    getY: function() {return this.y},
-    setX: function(p) {this.x += p},
-    setY: function(p) {this.y += p}
-},
-{ 
-    x: snake.posX - tileSize*4,
-    y: snake.posY,
-    nextMove: "right",
-    oldMove: "right",
-    getX: function() {return this.x},
-    getY: function() {return this.y},
-    setX: function(p) {this.x += p},
-    setY: function(p) {this.y += p}
 }];*/
-setup(8);
+setup(18);
 //apple
 let apple = {
     x: generateApplePosition(),
@@ -80,7 +60,8 @@ setInterval(() => {
     for (let i = 1; i < snake.length; i++) {
         if (i == 1) {
             snake.tail[i].oldMove = snake.tail[i].nextMove;
-            snake.tail[i].nextMove = snake.direction;
+            snake.tail[i].nextMove = snake.oldDirection;
+            snake.oldDirection = snake.direction;
         } else {
             snake.tail[i].oldMove = snake.tail[i].nextMove;
             snake.tail[i].nextMove = snake.tail[i-1].oldMove;
@@ -94,19 +75,19 @@ setInterval(() => {
             
             if (dir == "right") {
                 snake.posX += tileSize;
-                ctx.drawImage(snakeImg, snake.posX - i*(tileSize), snake.posY, tileSize, tileSize);
+                ctx.drawImage(snakeImg, snake.posX , snake.posY, tileSize, tileSize);
                 }
             else if (dir == "left") {
                 snake.posX -= tileSize;
-                ctx.drawImage(snakeImg, snake.posX + i*(tileSize), snake.posY, tileSize, tileSize);
+                ctx.drawImage(snakeImg, snake.posX, snake.posY, tileSize, tileSize);
                 }
             else if (dir == "up") {
                 snake.posY -= tileSize; 
-                ctx.drawImage(snakeImg, snake.posX, snake.posY - i*(tileSize), tileSize, tileSize);
+                ctx.drawImage(snakeImg, snake.posX, snake.posY, tileSize, tileSize);
                 }
             else if (dir == "down") {
                 snake.posY += tileSize; 
-                ctx.drawImage(snakeImg, snake.posX, snake.posY + i*(tileSize), tileSize, tileSize);
+                ctx.drawImage(snakeImg, snake.posX, snake.posY, tileSize, tileSize);
                 }
            }
            //tail
@@ -164,6 +145,7 @@ function setup(len) {
     snake = {
         length: len,
         direction: 'right', 
+        oldDirection: 'right',
         posX: 245,
         posY: 245,
         score: 0,
