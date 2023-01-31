@@ -9,7 +9,7 @@ let snakeImg = document.getElementById("imgSnake");
 const tileSize = 8;
 let gameOver = false;
 
-setup(18);
+setup(8);
 //apple
 let apple = {
     x: generateApplePosition(),
@@ -83,53 +83,75 @@ setInterval(() => {
             }
         }
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
-        checkBorder();
+        checkGameOver();
         isAppleTouched();
     }}, 200);
 
 //check for apple
 function isAppleTouched() {
-    
     if (apple.x == snake.getPosX() && apple.y == snake.getPosY()) {
-        alert("scored");
+        apple.x = generateApplePosition();
+        apple.y = generateApplePosition();
         snake.score += 50;
-        snake.length += 1;
-        document.getElementById("scorePoints").innerHTML = snake.score;
+        //document.getElementById("scorePoints").innerHTML = snake.score;
         snake.tail.push({
-            x: snake.posX - tileSize*(snake.length+1),
-            y:snake.posY,
-            nextMove: snake.tail[snake.length-1].oldMove,
+            x: undefined, //snake.tail[snake.length-1].getX()+tileSize,
+            y: undefined, //snake.tail[snake.length-1].getY()+tileSize,
+            nextMove: snake.tail[snake.length-2].oldMove,
             oldMove: "right",
             getX: function() {return this.x},
             getY: function() {return this.y},
             setX: function(p) {this.x += p},
             setY: function(p) {this.y += p}
         });
+        if (snake.tail[snake.length-1].oldMove == "up") {
+            snake.tail[snake.length].x = snake.tail[snake.length-1].getX();
+            snake.tail[snake.length].y = snake.tail[snake.length-1].getY()+tileSize;
+        }
+        else if (snake.tail[snake.length-1].oldMove == "down") {
+            snake.tail[snake.length].x = snake.tail[snake.length-1].getX();
+            snake.tail[snake.length].y = snake.tail[snake.length-1].getY()-tileSize;
+        }
+        else if (snake.tail[snake.length-1].oldMove == "right") {
+            snake.tail[snake.length].x = snake.tail[snake.length-1].getX()-tileSize;
+            snake.tail[snake.length].y = snake.tail[snake.length-1].getY();
+        }
+        else if (snake.tail[snake.length-1].oldMove == "left") {
+            snake.tail[snake.length].x = snake.tail[snake.length-1].getX()+tileSize;
+            snake.tail[snake.length].y = snake.tail[snake.length-1].getY();
+        }
+        snake.length += 1;
     }
 }
 
 //check for border
-function checkBorder() {
+function checkGameOver() {
     if (snake.getPosX() >= frameWidth || snake.getPosX() <= 0 || snake.posY >= frameHeight || snake.posY <= 0) {
         cnv.style.borderColor = "red";
         gameOver = true;
+    }
+    for (let i = 0; i < snake.length; i++) { 
+        if (snake.getPosX() == snake.tail[i].posY && snake.posY == snake.tail[i].posY) {
+            gameOver = true;
+        }
     }
 }
 //random positon for the apple
 function generateApplePosition() {
     let temp = Math.floor(Math.random() * (frameWidth-16)) + 8;
-    if (temp % 8 == 0) return temp;
+    if (temp % tileSize == 0) return temp;
     return generateApplePosition();  
-}
+    }
 
 function setup(len) {
     snake = {
         length: len,
-        direction: 'right', 
-        oldDirection: 'right',
-        posX: 245,
+        direction:'right', 
+        oldDirection:'right',
+        posX: 240,
         getPosX: function() {return this.posX},
-        posY: 245,
+        getPosY: function() {return this.posY},
+        posY: 240,
         score: 0,
         tail: []
     }
