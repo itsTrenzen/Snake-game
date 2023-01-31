@@ -90,7 +90,7 @@ setInterval(() => {
 //check for apple
 function isAppleTouched() {
     
-    if (apple.x == snake.getPosX() && apple.y == snake.posY) {
+    if (apple.x == snake.getPosX() && apple.y == snake.getPosY()) {
         alert("scored");
         snake.score += 50;
         snake.length += 1;
@@ -110,7 +110,7 @@ function isAppleTouched() {
 
 //check for border
 function checkBorder() {
-    if (snake.getPosX() >= frameWidth) {
+    if (snake.getPosX() >= frameWidth || snake.getPosX() <= 0 || snake.posY >= frameHeight || snake.posY <= 0) {
         cnv.style.borderColor = "red";
         gameOver = true;
     }
