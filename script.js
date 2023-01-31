@@ -9,6 +9,8 @@ let snakeImg = document.getElementById("imgSnake");
 const tileSize = 8;
 let gameOver = false;
 
+let tickSpeed = 200;
+
 setup(8);
 //apple
 let apple = {
@@ -85,7 +87,7 @@ setInterval(() => {
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
         checkGameOver();
         isAppleTouched();
-    }}, 200);
+    }}, tickSpeed);
 
 //check for apple
 function isAppleTouched() {
@@ -95,8 +97,8 @@ function isAppleTouched() {
         snake.score += 50;
         //document.getElementById("scorePoints").innerHTML = snake.score;
         snake.tail.push({
-            x: undefined, //snake.tail[snake.length-1].getX()+tileSize,
-            y: undefined, //snake.tail[snake.length-1].getY()+tileSize,
+            x: null,
+            y: null,
             nextMove: snake.tail[snake.length-2].oldMove,
             oldMove: "right",
             getX: function() {return this.x},
@@ -121,6 +123,7 @@ function isAppleTouched() {
             snake.tail[snake.length].y = snake.tail[snake.length-1].getY();
         }
         snake.length += 1;
+        if (tickSpeed >= 50)tickSpeed -= 10;
     }
 }
 
