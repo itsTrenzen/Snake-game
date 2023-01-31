@@ -28,6 +28,9 @@ document.addEventListener('keyup', (e) => {
 
 //run
 setInterval(() => {
+
+    
+
     if (!gameOver) {
     ctx.clearRect(0,0, frameWidth, frameHeight);
     //transfering moves
@@ -133,8 +136,9 @@ function checkGameOver() {
         cnv.style.borderColor = "red";
         gameOver = true;
     }
-    for (let i = 0; i < snake.length; i++) { 
-        if (snake.getPosX() == snake.tail[i].posY && snake.posY == snake.tail[i].posY) {
+    for (let i = 1; i < snake.length; i++) { 
+        if (snake.getPosX() == snake.tail[i].getX() && snake.getPosY() == snake.tail[i].getY()) {
+            cnv.style.borderColor = "red";
             gameOver = true;
         }
     }
