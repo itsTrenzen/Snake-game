@@ -29,11 +29,10 @@ document.addEventListener('keyup', (e) => {
 //run
 setInterval(() => {
 
-    
-
     if (!gameOver) {
     ctx.clearRect(0,0, frameWidth, frameHeight);
     //transfering moves
+    isAppleTouched();
     for (let i = 1; i < snake.length; i++) {
         if (i == 1) {
             snake.tail[i].oldMove = snake.tail[i].nextMove;
@@ -89,7 +88,7 @@ setInterval(() => {
         }
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
         checkGameOver();
-        isAppleTouched();
+        
     }}, tickSpeed);
 
 //check for apple
