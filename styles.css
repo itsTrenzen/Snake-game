@@ -1,9 +1,13 @@
+html {
+    overflow: hidden;
+}
 body {
     background-color: black;
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
 .gameArea {
@@ -19,6 +23,8 @@ body {
     position: absolute;
     top: 15%;
     left: 10%;
+    width: 40%;
+    height: 10%;
     font-family: impact;
     color: cornflowerblue;
 }
@@ -26,14 +32,14 @@ body {
 #scoreLabel {
    font-size: 30px;
    position: absolute;
-   left: 20%;
+   left: 10%;
    top: 10%;
 }
 
 #scorePoints {
     position: absolute;
     font-size: 30px;
-    left: 50%;
+    left: 80%;
     top: 10%;
 }
 
