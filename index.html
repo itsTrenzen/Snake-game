@@ -4,23 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,' name='viewport' />
     <link rel="stylesheet" href="styles.css">
     <title>Snake</title>
 </head>
 <body>
     <div class="gameArea"> 
         <div class="scoreArea">
-            <span class="scoreLabel">Score</span>
-            <span class="scorePoints">0</span>
+            <span id="scoreLabel">Score</span>
+            <span id="scorePoints">0</span>
         </div>
-         <canvas id="cnv" width="500" height="500"></canvas>
-    </div>
-    
+            <canvas id="cnv" width="500" height="500"></canvas>
+        <div class="controls">
+            <button id="moveUp" onclick="getTouch('moveUp')">UP</button>
+            <button id="moveDown" onclick="getTouch('moveDown')">DOWN</button>
+            <button id="moveLeft" onclick="getTouch('moveLeft')">LEFT</button>
+            <button id="moveRight" onclick="getTouch('moveRight')">RIGHT</button>
+        </div>
+        <button id="restart" onclick="setup(8)">RESTART</button>
+    </div> 
     <div class="tiles">
         <img src="Tile_snake.png" id="imgSnake">
         <img src="Tile_apple.png" id="imgApple">
     </div>
-    
 </body>
 <script src="script.js"></script>
 </html>

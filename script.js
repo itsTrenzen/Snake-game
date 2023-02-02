@@ -18,13 +18,21 @@ let apple = {
     y: generateApplePosition(),
     imgApple: document.getElementById("imgApple")
 }
-//events
+//Keyboard events
 document.addEventListener('keyup', (e) => {
     if (e.code == "ArrowUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up";
     else if (e.code == "ArrowDown" && (snake.direction != "up" && snake.direction != "down")) snake.direction = "down";
     else if (e.code == "ArrowLeft" && (snake.direction != "right" && snake.direction != "left")) snake.direction = "left";
     else if (e.code == "ArrowRight" && (snake.direction != "left" && snake.direction != "right")) snake.direction = "right"; 
 });
+//Touch events
+function getTouch(touch) {
+    if (touch == "moveUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up";
+    else if (touch == "moveDown" && (snake.direction != "up" && snake.direction != "down")) snake.direction = "down";
+    else if (touch == "moveLeft" && (snake.direction != "right" && snake.direction != "left")) snake.direction = "left";
+    else if (touch == "moveRight" && (snake.direction != "left" && snake.direction != "right")) snake.direction = "right";
+}
+
 
 //run
 setInterval(() => {
@@ -97,7 +105,7 @@ function isAppleTouched() {
         apple.x = generateApplePosition();
         apple.y = generateApplePosition();
         snake.score += 50;
-        //document.getElementById("scorePoints").innerHTML = snake.score;
+        document.getElementById("scorePoints").innerHTML = snake.score;
         snake.tail.push({
             x: null,
             y: null,
@@ -150,6 +158,8 @@ function generateApplePosition() {
     }
 
 function setup(len) {
+    gameOver = false;
+    cnv.style.borderColor = "blue";
     snake = {
         length: len,
         direction:'right', 
