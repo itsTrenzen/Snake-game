@@ -171,6 +171,7 @@ function setup(len) {
         score: 0,
         tail: []
     }
+    document.getElementById("scorePoints").innerHTML = snake.score;
     for (let index = 0; index < len; index++) {
         if (index == 0) {
             snake.tail = [{}];
