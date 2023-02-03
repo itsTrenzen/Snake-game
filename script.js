@@ -11,13 +11,13 @@ let gameOver = false;
 
 let tickSpeed = 200;
 
-setup(8);
 //apple
 let apple = {
     x: generateApplePosition(),
     y: generateApplePosition(),
     imgApple: document.getElementById("imgApple")
 }
+setup(8);
 //Keyboard events
 document.addEventListener('keyup', (e) => {
     if (e.code == "ArrowUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up";
@@ -39,8 +39,8 @@ setInterval(() => {
 
     if (!gameOver) {
     ctx.clearRect(0,0, frameWidth, frameHeight);
-    //transfering moves
     isAppleTouched();
+    //transfering moves
     for (let i = 1; i < snake.length; i++) {
         if (i == 1) {
             snake.tail[i].oldMove = snake.tail[i].nextMove;
@@ -96,7 +96,6 @@ setInterval(() => {
         }
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
         checkGameOver();
-        
     }}, tickSpeed);
 
 //check for apple
@@ -133,7 +132,7 @@ function isAppleTouched() {
             snake.tail[snake.length].y = snake.tail[snake.length-1].getY();
         }
         snake.length += 1;
-        if (tickSpeed >= 50)tickSpeed -= 10;
+        if (tickSpeed >= 50) tickSpeed -= 15;
     }
 }
 
@@ -160,6 +159,8 @@ function generateApplePosition() {
 function setup(len) {
     gameOver = false;
     cnv.style.borderColor = "blue";
+    apple.x = generateApplePosition();
+    apple.y = generateApplePosition();
     snake = {
         length: len,
         direction:'right', 
