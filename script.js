@@ -116,7 +116,7 @@ function isAppleTouched() {
         snake.tail.push({
             x: null,
             y: null,
-            nextMove: snake.tail[snake.length-2].oldMove,
+            nextMove: snake.tail[snake.length-1].oldMove,
             oldMove: "right",
             getX: function() {return this.x},
             getY: function() {return this.y},
