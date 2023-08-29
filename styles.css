@@ -23,7 +23,7 @@ body {
     position: absolute;
     transform: translate(-50%,-50%);
 }
-
+/*For iPhone 11*/
 @media screen and (max-width: 480px){
     .gameArea {
         position: absolute;
@@ -66,10 +66,6 @@ body {
         position: absolute;
         transform: translate(-50%, -50%);
         width: 99%;
-    }
-    
-    .tiles {
-        visibility: hidden;
     }
     
     .controls {

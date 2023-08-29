@@ -35,8 +35,8 @@ function getTouch(touch) {
 
 
 //run
-setInterval(() => {
 
+function intervalFunction() {
     if (!gameOver) {
     ctx.clearRect(0,0, frameWidth, frameHeight);
     isAppleTouched();
@@ -96,11 +96,19 @@ setInterval(() => {
         }
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
         checkGameOver();
-    }}, tickSpeed);
+    }
+}
+
+let gameInterval = setInterval(() => {intervalFunction()}, tickSpeed);
 
 //check for apple
 function isAppleTouched() {
     if (apple.x == snake.getPosX() && apple.y == snake.getPosY()) {
+        
+        clearInterval(gameInterval);
+        if (tickSpeed >= 50) tickSpeed -= 5;
+        gameInterval = setInterval(() => {intervalFunction()}, tickSpeed);
+
         apple.x = generateApplePosition();
         apple.y = generateApplePosition();
         snake.score += 50;
@@ -132,7 +140,7 @@ function isAppleTouched() {
             snake.tail[snake.length].y = snake.tail[snake.length-1].getY();
         }
         snake.length += 1;
-        if (tickSpeed >= 50) tickSpeed -= 15;
+        
     }
 }
 
