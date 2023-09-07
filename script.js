@@ -10,6 +10,7 @@ const tileSize = 8;
 let gameOver = false;
 
 let tickSpeed = 200;
+let pastTicks = 0;
 
 //apple
 let apple = {
@@ -20,11 +21,14 @@ let apple = {
 setup(8);
 //Keyboard events
 document.addEventListener('keyup', (e) => {
-    if (e.code == "ArrowUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up";
-    else if (e.code == "ArrowDown" && (snake.direction != "up" && snake.direction != "down")) snake.direction = "down";
-    else if (e.code == "ArrowLeft" && (snake.direction != "right" && snake.direction != "left")) snake.direction = "left";
-    else if (e.code == "ArrowRight" && (snake.direction != "left" && snake.direction != "right")) snake.direction = "right"; 
+    if (pastTicks >= 200) {
+    if (e.code == "ArrowUp" && (snake.direction != "down" && snake.direction != "up")) {snake.direction = "up"; pastTicks = 0;}
+    else if (e.code == "ArrowDown" && (snake.direction != "up" && snake.direction != "down")) {snake.direction = "down"; pastTicks = 0;}
+    else if (e.code == "ArrowLeft" && (snake.direction != "right" && snake.direction != "left")) {snake.direction = "left"; pastTicks = 0;}
+    else if (e.code == "ArrowRight" && (snake.direction != "left" && snake.direction != "right")) {snake.direction = "right"; pastTicks = 0;}
+    } 
 });
+
 //Touch events
 function getTouch(touch) {
     if (touch == "moveUp" && (snake.direction != "down" && snake.direction != "up")) snake.direction = "up";
@@ -35,22 +39,21 @@ function getTouch(touch) {
 
 
 //run
-setInterval(() => {
-
+function intervalFunction() {
     if (!gameOver) {
-    ctx.clearRect(0,0, frameWidth, frameHeight);
-    isAppleTouched();
-    //transfering moves
-    for (let i = 1; i < snake.length; i++) {
-        if (i == 1) {
-            snake.tail[i].oldMove = snake.tail[i].nextMove;
-            snake.tail[i].nextMove = snake.oldDirection;
-            snake.oldDirection = snake.direction;
-        } else {
-            snake.tail[i].oldMove = snake.tail[i].nextMove;
-            snake.tail[i].nextMove = snake.tail[i-1].oldMove;
-        } 
-    }
+        ctx.clearRect(0,0, frameWidth, frameHeight);
+        isAppleTouched();
+        //transfering moves
+        for (let i = 1; i < snake.length; i++) {
+            if (i == 1) {
+                snake.tail[i].oldMove = snake.tail[i].nextMove;
+                snake.tail[i].nextMove = snake.oldDirection;
+                snake.oldDirection = snake.direction;
+            } else {
+                snake.tail[i].oldMove = snake.tail[i].nextMove;
+                snake.tail[i].nextMove = snake.tail[i-1].oldMove;
+            } 
+        }
 
     for (let i = 0; i < snake.length; i++) { 
         //head
@@ -96,11 +99,20 @@ setInterval(() => {
         }
         ctx.drawImage(apple.imgApple, apple.x, apple.y, tileSize, tileSize);
         checkGameOver();
-    }}, tickSpeed);
+    pastTicks += 200;
+    }
+}
+
+let gameInterval = setInterval(() => {intervalFunction()}, tickSpeed);
 
 //check for apple
 function isAppleTouched() {
     if (apple.x == snake.getPosX() && apple.y == snake.getPosY()) {
+        
+        clearInterval(gameInterval);
+        if (tickSpeed >= 50) tickSpeed -= 5;
+        gameInterval = setInterval(() => {intervalFunction()}, tickSpeed);
+
         apple.x = generateApplePosition();
         apple.y = generateApplePosition();
         snake.score += 50;
@@ -108,7 +120,7 @@ function isAppleTouched() {
         snake.tail.push({
             x: null,
             y: null,
-            nextMove: snake.tail[snake.length-2].oldMove,
+            nextMove: snake.tail[snake.length-1].oldMove,
             oldMove: "right",
             getX: function() {return this.x},
             getY: function() {return this.y},
@@ -132,7 +144,7 @@ function isAppleTouched() {
             snake.tail[snake.length].y = snake.tail[snake.length-1].getY();
         }
         snake.length += 1;
-        if (tickSpeed >= 50) tickSpeed -= 15;
+        
     }
 }
 
