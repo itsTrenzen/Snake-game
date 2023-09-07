@@ -150,7 +150,7 @@ body {
     .scoreArea {
         position: absolute;
         top: 15%;
-        left: 50%;
+        left: 65%;
         width: 60%;
         height: 10%;
         font-family: impact;
@@ -168,7 +168,7 @@ body {
     #scorePoints {
         position: absolute;
         font-size: 40px;
-        left: 25%;
+        left: 15%;
         top: 60%;
     }
     
@@ -178,7 +178,7 @@ body {
         left: 50%;
         position: absolute;
         transform: translate(-50%, -50%);
-        width: 100%;
+        width: 50%;
     }
     
     .controls {
@@ -240,7 +240,7 @@ body {
     
     #restart {
         position: absolute;
-        right: 5%;
+        right: 25%;
         top: 90%;
         width: 75px;
         height: 40px;
